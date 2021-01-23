@@ -2,6 +2,8 @@
 """ Measure voltage normalized per hour
 """
 
+import sys
+import os.path as op
 import re
 from datetime import datetime as DTM, timedelta
 from collections import Counter
@@ -85,8 +87,8 @@ def print_tab(tab):
     print('Average: {:0.1f}'.format(average))
 
 
-def main():
-    plines = parsed_lines(LOG_FILE)
+def print_counts(fname):
+    plines = parsed_lines(fname)
     ctrs = get_ctrs(plines)
     tabs = [counts2tab(c) for c in ctrs]
     if len(tabs) == 0:
@@ -96,6 +98,15 @@ def main():
         print('Table for kernel', kno)
         print_tab(tab)
         print('-' * 10)
+
+
+def test_smoke():
+    print_counts(op.join(op.dirname(__file__), 'data', 'messages'))
+
+
+def main():
+    fname = sys.argv[-1] if len(sys.argv) > 1 else LOG_FILE
+    print_counts(fname)
 
 
 if __name__ == '__main__':
